@@ -23,6 +23,7 @@
     height: 408px;
     background: #313339;
     border-radius: 5px;
+    z-index: 1;
 
     .login-form {
       display: flex;
@@ -56,6 +57,7 @@
           font-family: Pretendard-Mideum;
           font-size: 14px;
           color: #01a8fb;
+          cursor: pointer;
           &:hover {
             text-decoration: underline;
           }
@@ -68,8 +70,8 @@
           color: rgba(182, 185, 193, 0.75);
           font-family: Pretendard-Regular;
           font-size: 14px;
-
           span {
+            cursor: pointer;
             color: #01a8fb;
             &:hover {
               text-decoration: underline;
@@ -106,7 +108,7 @@
 
       h2 {
         margin-top: 8px;
-        color: rgba(182, 185, 193, 0.75);
+        color: rgba(182, 185, 193, 0.93);
         text-align: center;
         font-size: 16px;
         font-family: Pretendard-Mideum;
@@ -119,6 +121,7 @@
       p {
         margin-top: 14px;
         color: #01a8fb;
+        cursor: pointer;
         &:hover {
           text-decoration: underline;
         }

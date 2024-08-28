@@ -1,7 +1,7 @@
 .formBtn {
   position: relative;
   display: flex;
-  width: 416px;
+  width: 400px;
   height: 44px;
   padding: 2px 16px;
   background: #5865f2;
@@ -9,6 +9,11 @@
   justify-content: center;
   align-items: center;
   margin-top: 20px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(88, 101, 242, 0.7);
+  }
 
   h1 {
     color: white;

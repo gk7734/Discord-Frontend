@@ -5,10 +5,25 @@ import TextInput from "@/app/components/TextInput";
 import FormBtn from "@/app/components/FormBtn";
 import {useState} from "react";
 import QRCode from "qrcode.react";
+import Link from "next/link";
+import { gsap } from "gsap";
+import {useGSAP} from "@gsap/react";
 
 const login = () => {
     const [email, setEmail] = useState<null | string>(null);
     const [password, setPassword] = useState<null | string>(null);
+
+    useGSAP(() => {
+        gsap.fromTo('.login-container', {
+            opacity: 0,
+            y: -100,
+        }, {
+            y: 0,
+            opacity: 1,
+            duration: 0.3,
+            ease: 'power3.inOut'
+        })
+    })
 
     return (
         <div className={`login`}>
@@ -30,7 +45,7 @@ const login = () => {
                         </div>
                         <div className={'login-bottom'}>
                             <FormBtn title={'로그인'} />
-                            <p>계정이 필요하신가요? <span>가입하기</span></p>
+                            <p>계정이 필요하신가요? <Link href={`/register`} style={{ textDecoration: "none"}}><span>가입하기</span></Link></p>
                         </div>
                     </form>
                 </div>
@@ -39,7 +54,7 @@ const login = () => {
                         <QRCode value={'1234'} size={160} />
                     </div>
                     <h1>QR 코드로 로그인</h1>
-                    <h2><span>디스코드 모바일 앱</span>으로 스캔해 바로 <br />
+                    <h2><span>Discord 모바일 앱</span>으로 스캔해 바로 <br />
                         로그인 하세요.
                     </h2>
                     <p>또는, 패스키로 로그인하세요</p>
