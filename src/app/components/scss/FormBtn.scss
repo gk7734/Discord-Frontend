@@ -1,0 +1,18 @@
+.formBtn {
+  position: relative;
+  display: flex;
+  width: 416px;
+  height: 44px;
+  padding: 2px 16px;
+  background: #5865f2;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+
+  h1 {
+    color: white;
+    font-family: Pretendard-Regular;
+    font-size: 16px;
+  }
+}
