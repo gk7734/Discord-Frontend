@@ -3,6 +3,16 @@
     padding: 0;
 }
 
+html {
+    font-size: 62.5%;
+}
+
+body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
 @font-face {
     font-family: 'Pretendard-Thin';
     src: url("../../public/fonts/Pretendard/Pretendard-Thin.otf") format('opentype');

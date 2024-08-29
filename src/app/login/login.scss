@@ -26,6 +26,7 @@
     z-index: 1;
 
     .login-form {
+      margin-right: 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -83,7 +84,7 @@
 
     .qr-box {
       display: flex;
-      margin-right: 20px;
+      margin-right: 40px;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -108,10 +109,11 @@
 
       h2 {
         margin-top: 8px;
+        line-height: 20px;
         color: rgba(182, 185, 193, 0.93);
         text-align: center;
         font-size: 16px;
-        font-family: Pretendard-Mideum;
+        font-family: Pretendard-Regular;
 
         span {
           font-family: Pretendard-SemiBold;
@@ -120,6 +122,7 @@
 
       p {
         margin-top: 14px;
+        font-size: 14px;
         color: #01a8fb;
         cursor: pointer;
         &:hover {
