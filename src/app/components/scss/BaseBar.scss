@@ -1,0 +1,9 @@
+.base-container {
+  position: relative;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  width: 24rem;
+  height: 100vh;
+  background: #2b2d31;
+}
