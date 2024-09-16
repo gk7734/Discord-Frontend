@@ -1,6 +1,8 @@
 const AllSt = () => {
     return (
-        <></>
+        <section>
+
+        </section>
     )
 }
 
