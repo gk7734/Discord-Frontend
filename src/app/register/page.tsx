@@ -8,6 +8,7 @@ import DatePicker from "@/app/components/DatePicker";
 import FormBtn from "@/app/components/FormBtn";
 import {useGSAP} from "@gsap/react";
 import {gsap} from "gsap";
+import {useBirthStore} from "@/app/store/useStore";
 
 // interface dataProps {
 //     title: string,
@@ -22,6 +23,8 @@ const register = () => {
     const [username, setUsername] = useState<string | null>(null);
     const [password, setPassword] = useState<string | null>(null);
     const [promo, setPromo] = useState(false);
+    const birth = useBirthStore(state => state.birth);
+
     const data  = [
         {
             title: '이메일',
@@ -52,6 +55,7 @@ const register = () => {
             type: 'password'
         },
     ]
+    console.log(birth)
 
     useGSAP(() => {
         gsap.fromTo('.register-container', {
