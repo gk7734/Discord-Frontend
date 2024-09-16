@@ -21,7 +21,7 @@ const register = () => {
     const [nickname, setNickname] = useState<string | null>(null);
     const [username, setUsername] = useState<string | null>(null);
     const [password, setPassword] = useState<string | null>(null);
-
+    const [promo, setPromo] = useState(false);
     const data  = [
         {
             title: '이메일',
@@ -65,6 +65,8 @@ const register = () => {
         })
     })
 
+    console.log(promo)
+
     return (
         <div className={`register`} onContextMenu={(e) => e.preventDefault()}>
             <div className={`logo`}>
@@ -75,15 +77,15 @@ const register = () => {
                 <form className={`register-form`}>
                     {data.map((item: any, idx: number) => {
                         return (
-                            <>
-                                <TextInput key={idx} title={item.title} state={item.state} setState={item.setState} required={item.required} type={item.type}/>
+                            <div key={idx}>
+                                <TextInput title={item.title} state={item.state} setState={item.setState} required={item.required} type={item.type}/>
                                 <br />
-                            </>
+                            </div>
                         )
                     })}
                     <DatePicker/>
                     <div className={`promo`}>
-                        <input type={"checkbox"}/>
+                        <input type={"checkbox"} checked={promo} onChange={() => setPromo(!promo)} />
                         <p>(선택사항) Discord 소식, 도움말, 특별 할일을 이메일로 보내주세요. 언제든지 취<br/>
                             소하실 수 있어요.
                         </p>
