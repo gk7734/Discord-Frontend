@@ -2,12 +2,12 @@
 import './login.scss'
 import TextInput from "@/app/components/TextInput";
 import FormBtn from "@/app/components/FormBtn";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import {useGSAP} from "@gsap/react";
 import {QRCode} from "react-qrcode-logo";
-import {useModalStore} from "@/app/store/useStore";
+import {useCaptchaStore, useModalStore} from "@/app/store/useStore";
 import CaptchaModal from "@/app/components/CaptchaModal";
 import BackDrop from "@/app/components/BackDrop";
 
@@ -15,6 +15,9 @@ const login = () => {
     const [email, setEmail] = useState<null | string>(null);
     const [password, setPassword] = useState<null | string>(null);
     const { isOpen, setOpen } = useModalStore();
+    const verify = useCaptchaStore(state => state.verify);
+
+    const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     useGSAP(() => {
         gsap.fromTo('.login-container', {
@@ -28,6 +31,20 @@ const login = () => {
         })
     })
 
+    useEffect(() => {
+
+    }, [verify]);
+
+
+    const submitHandler = (e: any) => {
+        e.preventDefault();
+        if (!passwordRegExp.test(password as string)) {
+            alert('비밀번호는 최소 8자 이상, 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.');
+        } else {
+            setOpen(true);
+        }
+    }
+
     return (
         <div className={`login`} onContextMenu={(e) => {e.preventDefault()}}>
             <div className={`logo`}>
@@ -39,7 +56,7 @@ const login = () => {
                         <h1>돌아오신 것을 환영해요!</h1>
                         <h2>다시 만나다니 너무 반가워요!</h2>
                     </div>
-                    <form>
+                    <form onSubmit={submitHandler}>
                         <div className={`lg-inputBox`}>
                             <TextInput title={`이메일 또는 전화번호`} state={email} setState={setEmail} required={true} />
                             <br />

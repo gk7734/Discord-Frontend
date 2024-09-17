@@ -3,14 +3,15 @@
 import './register.scss';
 import Link from "next/link";
 import TextInput from "@/app/components/TextInput";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import DatePicker from "@/app/components/DatePicker";
 import FormBtn from "@/app/components/FormBtn";
 import {useGSAP} from "@gsap/react";
 import {gsap} from "gsap";
-import {useBirthStore, useModalStore} from "@/app/store/useStore";
+import {useBirthStore, useCaptchaStore, useModalStore} from "@/app/store/useStore";
 import BackDrop from "@/app/components/BackDrop";
 import CaptchaModal from "@/app/components/CaptchaModal";
+import axios from "axios";
 
 // interface dataProps {
 //     title: string,
@@ -26,6 +27,7 @@ const register = () => {
     const [password, setPassword] = useState<string | null>(null);
     const [promo, setPromo] = useState(false);
     const { isOpen, setOpen } = useModalStore();
+    const verify = useCaptchaStore(state => state.verify);
 
     const birth = useBirthStore(state => state.birth);
     const birthday = new Date(birth.year, birth.month - 1, birth.day).toISOString();
@@ -63,7 +65,19 @@ const register = () => {
 
     const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-    console.log(birthday);
+   const fetchData = async () => {
+       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
+           email,
+           nickname,
+           username,
+           password,
+           birthday,
+       });
+
+       if (res.status === 201) {
+           window.location.href = '/login';
+       }
+   }
 
     useGSAP(() => {
         gsap.fromTo('.register-container', {
@@ -76,6 +90,13 @@ const register = () => {
             ease: 'power3.inOut'
         })
     })
+
+    useEffect(() => {
+        if (verify) {
+            setOpen(false);
+            fetchData().catch(err => console.log(err));
+        }
+    }, [verify]);
 
     const submitHandler = (e: any) => {
         e.preventDefault();
