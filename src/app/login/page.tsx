@@ -2,16 +2,19 @@
 import './login.scss'
 import TextInput from "@/app/components/TextInput";
 import FormBtn from "@/app/components/FormBtn";
-import {useState} from "react";
+import React, {useState} from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import {useGSAP} from "@gsap/react";
 import {QRCode} from "react-qrcode-logo";
-import logo from '../../../public/Images/DiscordBlackIcon.png'
+import {useModalStore} from "@/app/store/useStore";
+import CaptchaModal from "@/app/components/CaptchaModal";
+import BackDrop from "@/app/components/BackDrop";
 
 const login = () => {
     const [email, setEmail] = useState<null | string>(null);
     const [password, setPassword] = useState<null | string>(null);
+    const { isOpen, setOpen } = useModalStore();
 
     useGSAP(() => {
         gsap.fromTo('.login-container', {
@@ -58,6 +61,7 @@ const login = () => {
                     <p>또는, 패스키로 로그인하세요</p>
                 </div>
             </div>
+            {isOpen && <BackDrop><CaptchaModal/></BackDrop>}
         </div>
     )
 }

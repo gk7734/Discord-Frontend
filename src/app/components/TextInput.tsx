@@ -14,7 +14,7 @@ const TextInput: FC<TextInputProps> = ({ title, required, type, state, setState 
     return (
         <div className={`inputBox`}>
             <label>{title}{required && <sup className={`required`}>*</sup>}</label>
-            <input type={type || 'text'} value={state || ''} onChange={(e) => setState(e.target.value)} />
+            <input type={type || 'text'} value={state || ''} onChange={(e) => setState(e.target.value)} required={required} />
         </div>
     )
 }

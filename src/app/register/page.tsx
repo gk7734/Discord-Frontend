@@ -8,7 +8,9 @@ import DatePicker from "@/app/components/DatePicker";
 import FormBtn from "@/app/components/FormBtn";
 import {useGSAP} from "@gsap/react";
 import {gsap} from "gsap";
-import {useBirthStore} from "@/app/store/useStore";
+import {useBirthStore, useModalStore} from "@/app/store/useStore";
+import BackDrop from "@/app/components/BackDrop";
+import CaptchaModal from "@/app/components/CaptchaModal";
 
 // interface dataProps {
 //     title: string,
@@ -23,15 +25,18 @@ const register = () => {
     const [username, setUsername] = useState<string | null>(null);
     const [password, setPassword] = useState<string | null>(null);
     const [promo, setPromo] = useState(false);
-    const birth = useBirthStore(state => state.birth);
+    const { isOpen, setOpen } = useModalStore();
 
-    const data  = [
+    const birth = useBirthStore(state => state.birth);
+    const birthday = new Date(birth.year, birth.month - 1, birth.day).toISOString();
+
+    const data = [
         {
             title: '이메일',
             state: email,
             setState: setEmail,
             required: true,
-            type: 'text'
+            type: 'email'
         },
         {
             title: '별명',
@@ -55,7 +60,10 @@ const register = () => {
             type: 'password'
         },
     ]
-    console.log(birth)
+
+    const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    console.log(birthday);
 
     useGSAP(() => {
         gsap.fromTo('.register-container', {
@@ -69,7 +77,14 @@ const register = () => {
         })
     })
 
-    console.log(promo)
+    const submitHandler = (e: any) => {
+        e.preventDefault();
+        if (!passwordRegExp.test(password as string)) {
+            alert('비밀번호는 최소 8자 이상, 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.');
+        } else {
+            setOpen(true);
+        }
+    }
 
     return (
         <div className={`register`} onContextMenu={(e) => e.preventDefault()}>
@@ -78,12 +93,12 @@ const register = () => {
             </div>
             <div className={`register-container`}>
                 <h1 className={`mainText`}>계정 만들기</h1>
-                <form className={`register-form`}>
+                <form className={`register-form`} onSubmit={submitHandler}>
                     {data.map((item: any, idx: number) => {
                         return (
                             <div key={idx}>
                                 <TextInput title={item.title} state={item.state} setState={item.setState} required={item.required} type={item.type}/>
-                                <br />
+                                <div style={{marginBottom: '2rem'}} />
                             </div>
                         )
                     })}
@@ -99,6 +114,7 @@ const register = () => {
                 </form>
                 <p className={`p-login`}><Link href={"/login"} style={{ textDecoration: "none", color: '#01a8fb'}}>이미 계정이 있으신가요?</Link></p>
             </div>
+            {isOpen && <BackDrop><CaptchaModal/></BackDrop>}
         </div>
     )
 }
