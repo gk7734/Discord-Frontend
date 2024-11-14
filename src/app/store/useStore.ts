@@ -23,6 +23,17 @@ interface ModalStore {
     setOpen: (isOpen: boolean) => void
 }
 
+interface SelectStore {
+    select: number | null;
+    setSelect: (value: number | null) => void;
+}
+
+interface SelectedIndexStore {
+    selectedIndex: number | null;
+    setSelectedIndex: (value: number | null) => void;
+}
+
+
 export const useBirthStore = create<BirthStore>((set) => ({
     birth: { year: 0, month: 0, day: 0 },
     setYear: (year: number) => set((state) => ({ birth: { ...state.birth, year } })),
@@ -38,4 +49,14 @@ export const useCaptchaStore = create<CaptchaStore>((set) => ({
 export const useModalStore = create<ModalStore>((set) => ({
     isOpen: false,
     setOpen: (isOpen: boolean) => set({ isOpen }),
+}));
+
+export const useSelectStore = create<SelectStore>((set) => ({
+    select: 1,
+    setSelect: (value) => set({ select: value }),
+}));
+
+export const useSelectedIndexStore = create<SelectedIndexStore>((set) => ({
+    selectedIndex: 0,
+    setSelectedIndex: (value) => set({ selectedIndex: value }),
 }));

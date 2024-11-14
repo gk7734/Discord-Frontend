@@ -10,6 +10,8 @@ import {QRCode} from "react-qrcode-logo";
 import {useCaptchaStore, useModalStore} from "@/app/store/useStore";
 import CaptchaModal from "@/app/components/CaptchaModal";
 import BackDrop from "@/app/components/BackDrop";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 const login = () => {
     const [email, setEmail] = useState<null | string>(null);
@@ -18,6 +20,23 @@ const login = () => {
     const verify = useCaptchaStore(state => state.verify);
 
     const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    const fetchData = async () => {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+            email,
+            password
+        })
+
+        if (res.status === 401) {
+            alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+        }
+
+        if (res.status === 201) {
+            alert('로그인 성공!');
+            Cookies.set('access_token', res.data.accessToken, { expires: 86400 });
+            window.location.href = '/channels/me'
+        }
+    }
 
     useGSAP(() => {
         gsap.fromTo('.login-container', {
@@ -32,9 +51,17 @@ const login = () => {
     })
 
     useEffect(() => {
+        const token = Cookies.get('access_token');
 
+        if (token) {
+            window.location.href = '/channels/me';
+        }
+
+        if (verify) {
+            setOpen(false);
+            fetchData().catch(err => console.error(err));
+        }
     }, [verify]);
-
 
     const submitHandler = (e: any) => {
         e.preventDefault();

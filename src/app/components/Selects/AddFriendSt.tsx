@@ -3,9 +3,30 @@
 import './scss/AddFriendSt.scss'
 import WumpusLoneliness from "@/app/components/Svgs/Wumpus/WumpusLoneliness";
 import {useState} from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const AddFriendSt = () => {
     const [search, setSearch] = useState<string>('');
+
+    const clickHandler = async () => {
+      try {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/friend/add`, {
+          username: search
+        }, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('access_token')}`
+          }
+        })
+            .then((res) => {
+              if (res.status === 201) {
+                alert(`${search}님의 친구가 추가되었습니다.`)
+              }
+            })
+      } catch (err) {
+        throw new Error(`${err}`)
+      }
+    }
 
     return (
         <section className={`addFriend-container`}>
@@ -25,6 +46,7 @@ const AddFriendSt = () => {
                     />
                     <button
                         className={!search.trim() ? '' : 'searched'}
+                        onClick={clickHandler}
                         disabled={!search.trim()}
                         style={{
                             cursor: !search.trim() ? 'not-allowed' : 'pointer',

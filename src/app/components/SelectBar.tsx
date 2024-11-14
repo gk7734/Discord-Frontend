@@ -5,9 +5,11 @@ import './scss/SelectBar.scss'
 import DetailBarText from "@/app/components/DetailBarText";
 import People from "@/app/components/Svgs/People";
 import {useState} from "react";
+import {useSelectedIndexStore} from "@/app/store/useStore";
 
 const SelectBar = () => {
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const { selectedIndex, setSelectedIndex } = useSelectedIndexStore();
+  console.log(selectedIndex)
 
     return (
         <div className={`selectBar`}>

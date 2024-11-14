@@ -6,10 +6,10 @@ import Nitro from "@/app/components/Svgs/Nitro";
 import Shop from "@/app/components/Svgs/Shop";
 import { AiOutlinePlus } from "react-icons/ai";
 import {useState} from "react";
+import {useSelectStore} from "@/app/store/useStore";
 
 const BaseBar = () => {
-    const [select, setSelect] = useState<number | null>(1);
-    console.log(select)
+    const { select, setSelect } = useSelectStore();
 
     return (
         <div className={`base-container`}>
