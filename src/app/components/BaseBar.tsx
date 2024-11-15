@@ -6,10 +6,12 @@ import Nitro from "@/app/components/Svgs/Nitro";
 import Shop from "@/app/components/Svgs/Shop";
 import { AiOutlinePlus } from "react-icons/ai";
 import {useState} from "react";
-import {useSelectStore} from "@/app/store/useStore";
+import {useModalStore, useSelectStore} from "@/app/store/useStore";
+import DmModal from "@/app/components/DmModal";
 
 const BaseBar = () => {
     const { select, setSelect } = useSelectStore();
+    const { isOpen, setOpen } = useModalStore();
 
     return (
         <div className={`base-container`}>
@@ -39,9 +41,10 @@ const BaseBar = () => {
             <div className={`friendBox`}>
                 <div className={`plus-dm`}>
                     <p>다이렉트 메세지</p>
-                    <AiOutlinePlus size={16} />
+                    <AiOutlinePlus size={16} onClick={() => setOpen(!isOpen)} />
                 </div>
             </div>
+            {isOpen && <DmModal />}
         </div>
     )
 }

@@ -57,6 +57,6 @@ export const useSelectStore = create<SelectStore>((set) => ({
 }));
 
 export const useSelectedIndexStore = create<SelectedIndexStore>((set) => ({
-    selectedIndex: 0,
+    selectedIndex: 4,
     setSelectedIndex: (value) => set({ selectedIndex: value }),
 }));
