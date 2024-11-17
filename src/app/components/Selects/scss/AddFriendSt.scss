@@ -78,9 +78,14 @@
         border: none;
         font-size: 1.6rem;
         color: #b6b9c1;
+        font-family: 'Pretendard-Light';
         &:focus {
           outline: none;
         }
+      }
+
+      input::placeholder {
+        color: rgba(229, 229, 229, 0.51);
       }
 
       button {

@@ -1,7 +1,12 @@
 import './scss/DetailBar.scss'
 import SelectBar from "@/app/components/SelectBar";
+import {FC} from "react";
 
-const DetailBar = () => {
+interface DetailBarProps {
+  chat?: boolean;
+}
+
+const DetailBar: FC<DetailBarProps> = ({chat}) => {
     return (
         <div className={`detail-container`}>
            <SelectBar />

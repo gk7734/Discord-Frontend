@@ -1,13 +1,19 @@
 import './scss/MainBase.scss'
 
 import DetailBar from "@/app/components/DetailBar";
+import {FC} from "react";
+import ChatBase from "@/app/components/ChatBase";
 import MainBar from "@/app/components/MainBar";
 
-const MainBase = () => {
+interface MainBaseProps {
+  chat?: boolean;
+}
+
+const MainBase: FC<MainBaseProps> = ({chat}) => {
     return (
         <div className={`mainBase`}>
-            <DetailBar />
-            <MainBar />
+            <DetailBar chat={chat} />
+          {chat ? <ChatBase /> : <MainBar />}
         </div>
     )
 }
