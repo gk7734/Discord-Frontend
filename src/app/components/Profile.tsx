@@ -3,13 +3,14 @@ import {FC} from "react";
 import { IoClose } from "react-icons/io5";
 
 interface ProfileProps {
-  friendName?: string
-  profileImage?: string
+  friendName?: string;
+  profileImage?: string;
+  selected?: boolean;
 }
 
-const Profile: FC<ProfileProps> = ({friendName, profileImage}) => {
+const Profile: FC<ProfileProps> = ({friendName, profileImage, selected}) => {
   return (
-        <div className={`profileContainer`}>
+        <div className={`profileContainer ${selected ? 'selected' : ''}`}>
           <div className={`profileBox`}>
             <img src={profileImage} alt={'profile-img'} width={32} height={32}/>
             <h1 className={`friendText`}>{friendName}</h1>

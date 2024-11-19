@@ -9,7 +9,6 @@ import {useSelectedIndexStore} from "@/app/store/useStore";
 
 const SelectBar = () => {
     const { selectedIndex, setSelectedIndex } = useSelectedIndexStore();
-  console.log(selectedIndex)
 
     return (
         <div className={`selectBar`}>

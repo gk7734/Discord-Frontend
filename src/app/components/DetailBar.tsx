@@ -1,6 +1,7 @@
 import './scss/DetailBar.scss'
 import SelectBar from "@/app/components/SelectBar";
 import {FC} from "react";
+import ChatBar from "@/app/components/ChatBar";
 
 interface DetailBarProps {
   chat?: boolean;
@@ -9,7 +10,7 @@ interface DetailBarProps {
 const DetailBar: FC<DetailBarProps> = ({chat}) => {
     return (
         <div className={`detail-container`}>
-           <SelectBar />
+          {chat ? <ChatBar /> : <SelectBar />}
         </div>
     )
 }

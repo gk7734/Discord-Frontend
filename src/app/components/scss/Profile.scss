@@ -8,6 +8,11 @@
    align-items: center;
    padding: 0 0.8rem;
    cursor: pointer;
+   margin-bottom: 2px;
+
+   &.selected {
+     background: #404249 !important;
+   }
 
    &:active {
      background: #404249 !important;
