@@ -3,15 +3,19 @@
 import './scss/ChatBase.scss'
 import ChannelBottomBar from "@/app/components/channelBottomBar";
 import { useSelectDmStore, useSelectStore, useUserDataStore } from "@/app/store/useStore";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import { io, Socket } from "socket.io-client";
+import MessageItem from "@/app/components/MessageItem";
+import MessageItemContinue from "@/app/components/MessageItemContinue";
 import axios from "axios";
 import Cookies from "js-cookie";
+import {useParams} from "next/navigation";
 
-interface Message {
+export interface Message {
   senderId: string;
   content: string;
   createdAt: string;
+  continued: boolean;
 }
 
 interface MessagesResponse {
@@ -30,7 +34,8 @@ const ChatBase = () => {
   const socketRef = useRef<Socket | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const friendName = useSelectDmStore(state => state.friendName);
-  const { userData, setUserData } = useUserDataStore();
+  const { userData } = useUserDataStore();
+  const params = useParams();
 
   const initializeSocket = useCallback(() => {
     socketRef.current = io(SOCKET_URL, {
@@ -49,7 +54,7 @@ const ChatBase = () => {
     });
 
     socketRef.current.on('receiveDM', (data) => {
-      setMessageList(prevList => [...prevList, { senderId: data.from, content: data.content, createdAt: data.createdAt }]);
+      setMessageList(prevList => [...prevList, { senderId: data.from, content: data.content, createdAt: data.timestamp, continued: data.continued }]);
     });
 
     return () => {
@@ -57,51 +62,50 @@ const ChatBase = () => {
     };
   }, [userData?.username]);
 
-  const formatTime = (date: Date): string => {
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const period = hours >= 12 ? '오후' : '오전';
-    const formattedHours = hours % 12 || 12;
-    const formattedMinutes = minutes.toString().padStart(2, '0');
-
-    return `${period}${formattedHours}:${formattedMinutes}`;
-  };
+  console.log(messageList)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim() || !socketRef.current || !userData?.username) return;
 
     try {
-      socketRef.current.emit('sendDM', {
-        from: userData.username,
-        to: friendName,
-        content: message.trim()
-      });
-      setContinueWriting(true)
-      setMessage('');
+      if (continueWriting) {
+        socketRef.current.emit('sendDM', {
+          from: userData.username,
+          to: friendName,
+          content: message.trim(),
+          continued: continueWriting
+        });
+        setMessage('');
+      } else {
+        socketRef.current.emit('sendDM', {
+          from: userData.username,
+          to: friendName,
+          content: message.trim(),
+        });
+        setContinueWriting(true)
+        setMessage('');
+      }
     } catch (err) {
       console.error('Failed to send message:', err);
     }
   };
 
-  const MessageItem = ({ msg }: { msg: Message }) => (
-      <div className="messageBox">
-        <img
-            src={DEFAULT_PROFILE_IMAGE}
-            alt="profile"
-            className="profileImage"
-            width={36}
-            height={36}
-        />
-        <div>
-          <div className="messageDetail">
-            <h1 className="messageUsername">{msg.senderId}</h1>
-            <p className="messageTimestamp">{formatTime(new Date(msg.createdAt))}</p>
-          </div>
-          <h2 className="messageContent">{msg.content}</h2>
-        </div>
-      </div>
-  );
+  const getRoomHistory = async () => {
+    await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat/getRoomHistory/${params.id}`, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('access_token')}`
+      }
+    }).then((res) => {
+      if (res.status === 200) {
+        setMessageList(res.data[0].messages || []);
+      }
+    });
+  }
+
+  useEffect(() => {
+    getRoomHistory().catch(err => console.log(err));
+  }, []);
 
   useEffect(() => {
     if (friendName?.length === 0) {
@@ -126,7 +130,7 @@ const ChatBase = () => {
     if (continueWriting) {
       const id = setTimeout(() => {
         setContinueWriting(false);
-      }, 10000);
+      }, 420000);
       setTimeoutId(id);
     } else if (timeoutId) {
       clearTimeout(timeoutId);
@@ -145,9 +149,11 @@ const ChatBase = () => {
       <section className="chatBase-container">
         <div className="chatBox" ref={scrollRef}>
           <div className={`messages-container`}>
-            {messageList.map((msg, idx) => (
-                <MessageItem key={idx} msg={msg} />
-            ))}
+            {
+              messageList.map((msg, idx) => (
+                  msg.continued ? <MessageItemContinue msg={msg} isLasted={idx === messageList.length - 1} key={idx} /> : <MessageItem msg={msg} imageUrl={DEFAULT_PROFILE_IMAGE} key={idx} />
+              ))
+            }
           </div>
         </div>
         <form onSubmit={handleSubmit}>
